@@ -1,0 +1,32 @@
+.barVolumeBlock {
+  width: auto;
+  display: flex;
+  align-items: center;
+  padding: 0 92px 0 0;
+}
+
+.volumeContent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.volumeImage {
+  width: 13px;
+  height: 18px;
+  margin-right: 17px;
+}
+
+.volumeSvg {
+  width: 13px;
+  height: 18px;
+  fill: transparent;
+}
+
+.volumeProgress {
+  width: 109px;
+}
+
+.volumeProgressLine {
+  width: 109px;
+}

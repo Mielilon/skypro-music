@@ -1,0 +1,62 @@
+.centerblockContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.playlistContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.playlistTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playlistTitleCol {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 2px;
+  color: #696969;
+  text-transform: uppercase;
+}
+
+.col01 {
+  width: 447px;
+}
+
+.col02 {
+  width: 321px;
+}
+
+.col03 {
+  width: 245px;
+}
+
+.col04 {
+  width: 60px;
+  text-align: end;
+}
+
+.playlistTitleSvg {
+  width: 12px;
+  height: 12px;
+  fill: transparent;
+  stroke: #696969;
+}
+
+.contentPlaylist {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
