@@ -1,3 +1,6 @@
+"use client";
+
+import { useCurrentTrack } from "../../contexts/CurrentTrackProvider";
 import { TrackType } from "../../types/tracks";
 import { formatTime } from "../../utils/formatTime";
 import Icon from "../Icon/Icon";
@@ -13,8 +16,14 @@ export default function Track({ track }: TrackProps) {
 
   const formatedTime = formatTime(duration_in_seconds);
 
+  const { setCurrentTrack } = useCurrentTrack();
+
+  const handleClick = () => {
+    setCurrentTrack(track);
+  };
+
   return (
-    <div className={classNames(styles.playlistItem)}>
+    <div className={classNames(styles.playlistItem)} onClick={handleClick}>
       <div className={classNames(styles.playlistTrack, styles.track)}>
         <div className={styles.trackTitle}>
           <Icon
