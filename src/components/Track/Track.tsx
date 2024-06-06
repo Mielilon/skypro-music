@@ -1,33 +1,42 @@
+import { TrackType } from "../../types/tracks";
+import { formatTime } from "../../utils/formatTime";
+import Icon from "../Icon/Icon";
 import styles from "./Track.module.css";
 import classNames from "classnames";
 
-export default function Track() {
+type TrackProps = {
+  track: TrackType;
+};
+
+export default function Track({ track }: TrackProps) {
+  const { name, author, album, duration_in_seconds } = track;
+
+  const formatedTime = formatTime(duration_in_seconds);
+
   return (
     <div className={classNames(styles.playlistItem)}>
       <div className={classNames(styles.playlistTrack, styles.track)}>
         <div className={styles.trackTitle}>
-          <div className={styles.trackTitleImage}>
-            <svg className={styles.trackTitleSvg}>
-              <use xlinkHref="/img/icon/sprite.svg#icon-note" />
-            </svg>
-          </div>
+          <Icon
+            name="note"
+            wrapperClass={styles.trackTitleImage}
+            iconClass={styles.trackTitleSvg}
+          />
           <div className={styles.trackTitleText}>
             <span className={styles.trackTitleLink}>
-              Guilt <span className={styles.trackTitleSpan} />
+              {name} <span className={styles.trackTitleSpan} />
             </span>
           </div>
         </div>
         <div className={styles.trackAuthor}>
-          <span className={styles.trackAuthorLink}>Nero</span>
+          <span className={styles.trackAuthorLink}>{author}</span>
         </div>
         <div className={styles.trackAlbum}>
-          <span className={styles.trackAlbumLink}>Welcome Reality</span>
+          <span className={styles.trackAlbumLink}>{album}</span>
         </div>
         <div className={styles.trackTime}>
-          <svg className={styles.trackTimeSvg}>
-            <use xlinkHref="/img/icon/sprite.svg#icon-like" />
-          </svg>
-          <span className={styles.trackTimeText}>4:44</span>
+          <Icon name="like" iconClass={styles.trackTimeSvg} />
+          <span className={styles.trackTimeText}>{formatedTime}</span>
         </div>
       </div>
     </div>

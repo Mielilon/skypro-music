@@ -1,13 +1,27 @@
 import Nav from "@/components/Nav/Nav";
 import Search from "@/components/Search/Search";
-import Filter from "@/components/Filter/Filter";
+import FilterList from "@/components/FilterList/FilterList";
 import Playlist from "@/components/Playlist/Playlist";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import Bar from "@/components/Bar/Bar";
 
 import styles from "./page.module.css";
+import { TrackListType } from "../types/tracks";
+import { getTracks } from "../api/tracks";
 
-export default function Home() {
+export default async function Home() {
+  let tracks: TrackListType = [];
+  let error: string | null = null;
+
+  try {
+    tracks = await getTracks();
+  } catch (err: unknown) {
+    error =
+      err instanceof Error
+        ? "Ошибка при загрузке треков. " + err.message
+        : "Неизвестная ошибка";
+  }
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
@@ -16,8 +30,8 @@ export default function Home() {
           <div className={styles.mainCenterblock}>
             <Search />
             <h2 className={styles.centerblockTitle}>Треки</h2>
-            <Filter />
-            <Playlist />
+            <FilterList tracks={tracks} />
+            <Playlist tracks={tracks} error={error} />
           </div>
           <Sidebar />
         </main>
