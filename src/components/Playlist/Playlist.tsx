@@ -1,8 +1,15 @@
 import Track from "@/components/Track/Track";
 import styles from "./Playlist.module.css";
 import classNames from "classnames";
+import Icon from "../Icon/Icon";
+import { TrackListType } from "../../types/tracks";
 
-export default function Playlist() {
+type PlaylistProps = {
+  tracks: TrackListType;
+  error: string | null;
+};
+
+export default function Playlist({ tracks, error }: PlaylistProps) {
   return (
     <div
       className={classNames(styles.centerblockContent, styles.playlistContent)}
@@ -17,14 +24,18 @@ export default function Playlist() {
         <div className={classNames(styles.playlistTitleCol, styles.col03)}>
           Альбом
         </div>
-        <div className={classNames(styles.playlistTitleCol, styles.col04)}>
-          <svg className={styles.playlistTitleSvg}>
-            <use xlinkHref="/img/icon/sprite.svg#icon-watch" />
-          </svg>
-        </div>
+        <Icon
+          name="watch"
+          wrapperClass={classNames(styles.playlistTitleCol, styles.col04)}
+          iconClass={styles.playlistTitleSvg}
+        />
       </div>
       <div className={classNames(styles.contentPlaylist, styles.playlist)}>
-        <Track />
+        {error ? (
+          <div className={styles.error}>{error}</div>
+        ) : (
+          tracks.map((track) => <Track key={track.id} track={track} />)
+        )}
       </div>
     </div>
   );

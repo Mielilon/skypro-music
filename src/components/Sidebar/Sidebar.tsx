@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
 import classNames from "classnames";
+import Icon from "../Icon/Icon";
 
 const sidebarItems = [
   {
@@ -28,11 +29,11 @@ export default function Sidebar() {
     <div className={classNames(styles.mainSidebar, styles.sidebar)}>
       <div className={styles.sidebarPersonal}>
         <p className={styles.sidebarPersonalName}>Sergey.Ivanov</p>
-        <div className={styles.sidebarIcon}>
-          <svg>
-            <use xlinkHref="/img/icon/sprite.svg#logout" />
-          </svg>
-        </div>
+        <Icon
+          name="logout"
+          wrapperClass={styles.sidebarIcon}
+          iconClass={styles.sidebarIconSvg}
+        />
       </div>
       <div className={styles.sidebarBlock}>
         <div className={styles.sidebarList}>
