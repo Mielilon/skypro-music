@@ -1,34 +1,84 @@
 "use client";
 
-import classNames from "classnames";
-import Icon from "../Icon/Icon";
+import { useEffect, useRef, useState } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/store";
+import {
+  nextTrack,
+  prevTrack,
+  togglePlay,
+  toggleShuffle,
+} from "@/store/features/playlistSlice";
+import { formatTrackTime } from "@/utils/formatTime";
 import styles from "./Bar.module.css";
-import Volume from "@/components/Volume/Volume";
-import { useRef, useState } from "react";
 import ProgressBar from "./ProgressBar/ProgressBar";
-import { useCurrentTrack } from "../../contexts/CurrentTrackProvider";
-import { formatTrackTime } from "../../utils/formatTime";
+import PlayerControls from "./PlayerControls/PlayerControls";
+import TrackInfo from "./TrackInfo/TrackInfo";
+import Volume from "../Volume/Volume";
 
 export default function Bar() {
+  const dispatch = useAppDispatch();
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
+  const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
+  const isShuffle = useAppSelector((state) => state.playlist.isShuffle);
+
   const [currentTime, setCurrentTime] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-
+  const [isLoop, setIsLoop] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const { currentTrack } = useCurrentTrack();
 
   const duration = audioRef.current?.duration || 0;
 
-  const togglePlay = () => {
+  const handlePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
         audioRef.current.play();
       }
-      setIsPlaying((prev) => !prev);
+      dispatch(togglePlay());
     }
   };
+
+  const handleShuffle = () => {
+    dispatch(toggleShuffle());
+  };
+
+  const handleNext = () => {
+    dispatch(nextTrack());
+  };
+
+  const handlePrev = () => {
+    dispatch(prevTrack());
+  };
+
+  const toggleLoop = () => {
+    if (audioRef.current) {
+      audioRef.current.loop = !isLoop;
+      setIsLoop((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    if (audioRef.current && currentTrack) {
+      const handleCanPlay = () => {
+        audioRef.current?.play();
+        dispatch(togglePlay(true));
+      };
+
+      audioRef.current.addEventListener("canplay", handleCanPlay);
+
+      return () => {
+        audioRef.current?.removeEventListener("canplay", handleCanPlay);
+      };
+    }
+  }, [currentTrack]);
+
+  useEffect(() => {
+    audioRef.current?.addEventListener("ended", handleNext);
+
+    return () => {
+      audioRef.current?.removeEventListener("ended", handleNext);
+    };
+  }, [currentTrack]);
 
   const handleSeek = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (audioRef.current) {
@@ -36,46 +86,9 @@ export default function Bar() {
     }
   };
 
-  const handleNotImplemented = () => {
-    alert("Еще не реализовано");
-  };
-
   if (!currentTrack) {
     return null;
   }
-
-  const controls = [
-    {
-      name: "prev",
-      handler: handleNotImplemented,
-      wrapperClass: styles.playerBtnPrev,
-      iconClass: styles.playerBtnPrevSvg,
-    },
-    {
-      name: isPlaying ? "pause" : "play",
-      handler: togglePlay,
-      wrapperClass: styles.playerBtnPlay,
-      iconClass: styles.playerBtnPlaySvg,
-    },
-    {
-      name: "next",
-      handler: handleNotImplemented,
-      wrapperClass: styles.playerBtnNext,
-      iconClass: styles.playerBtnNextSvg,
-    },
-    {
-      name: "repeat",
-      handler: handleNotImplemented,
-      wrapperClass: styles.playerBtnRepeat,
-      iconClass: styles.playerBtnRepeatSvg,
-    },
-    {
-      name: "shuffle",
-      handler: handleNotImplemented,
-      wrapperClass: styles.playerBtnShuffle,
-      iconClass: styles.playerBtnShuffleSvg,
-    },
-  ];
 
   return (
     <div className={styles.bar}>
@@ -95,66 +108,17 @@ export default function Bar() {
           onChange={handleSeek}
         />
         <div className={styles.barPlayerBlock}>
-          <div className={classNames(styles.barPlayer, styles.player)}>
-            <div className={styles.playerControls}>
-              {controls.map((control) => (
-                <Icon
-                  key={control.name}
-                  name={control.name}
-                  wrapperClass={control.wrapperClass}
-                  iconClass={control.iconClass}
-                  onClick={control.handler}
-                />
-              ))}
-            </div>
-            <div
-              className={classNames(styles.playerTrackPlay, styles.trackPlay)}
-            >
-              <div className={styles.trackPlayContain}>
-                <Icon
-                  name="track"
-                  wrapperClass={styles.trackPlayImage}
-                  iconClass={styles.trackPlayImageSvg}
-                />
-                <div className={styles.trackPlayAuthor}>
-                  {currentTrack.author && (
-                    <span className={styles.trackPlayAuthorLink}>
-                      {currentTrack.author}
-                    </span>
-                  )}
-                </div>
-                <div className={styles.trackPlayAlbum}>
-                  {currentTrack.album && (
-                    <span className={styles.trackPlayAlbumLink}>
-                      {currentTrack.album}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className={styles.trackPlayLikeDis}>
-                <div
-                  className={classNames(styles.trackPlayLike, styles._btnIcon)}
-                >
-                  <Icon
-                    name="like"
-                    wrapperClass={classNames(
-                      styles.trackPlayLike,
-                      styles._btnIcon
-                    )}
-                    iconClass={styles.trackPlayLikeSvg}
-                  />
-                </div>
-                <Icon
-                  name="dislike"
-                  wrapperClass={classNames(
-                    styles.trackPlayDislike,
-                    styles._btnIcon
-                  )}
-                  iconClass={styles.trackPlayDislikeSvg}
-                />
-              </div>
-            </div>
-          </div>
+          <PlayerControls
+            isPlaying={isPlaying}
+            isLoop={isLoop}
+            isShuffle={isShuffle}
+            handlePrev={handlePrev}
+            handlePlay={handlePlay}
+            handleNext={handleNext}
+            toggleLoop={toggleLoop}
+            handleShuffle={handleShuffle}
+          />
+          <TrackInfo author={currentTrack.author} album={currentTrack.album} />
           <Volume audio={audioRef.current} />
         </div>
       </div>

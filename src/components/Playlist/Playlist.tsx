@@ -34,7 +34,9 @@ export default function Playlist({ tracks, error }: PlaylistProps) {
         {error ? (
           <div className={styles.error}>{error}</div>
         ) : (
-          tracks.map((track) => <Track key={track.id} track={track} />)
+          tracks.map((track) => (
+            <Track key={track.id} track={track} playlist={tracks} />
+          ))
         )}
       </div>
     </div>
