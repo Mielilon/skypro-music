@@ -2,6 +2,7 @@
   width: 100%;
   display: block;
   margin-bottom: 12px;
+  cursor: pointer;
 }
 
 .playlistTrack {
@@ -25,6 +26,33 @@
   align-items: center;
   justify-content: center;
   margin-right: 17px;
+}
+
+.trackTitleImageActive {
+  position: relative;
+}
+
+@keyframes pulsation {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 0.8;
+  }
+}
+
+.trackTitleImageActive::before {
+  content: "";
+  position: absolute;
+  margin: auto;
+  width: 25px;
+  height: 25px;
+  background: #ad61ff;
+  border-radius: 50%;
+}
+
+.trackTitleActiveAnimation::before {
+  animation: pulsation 0.2s infinite alternate;
 }
 
 .trackTitleSvg {

@@ -1,7 +1,8 @@
 "use client";
 
-import { useCurrentTrack } from "../../contexts/CurrentTrackProvider";
-import { TrackType } from "../../types/tracks";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
+import { setCurrentTrack } from "../../store/features/playlistSlice";
+import { TrackListType, TrackType } from "../../types/tracks";
 import { formatTime } from "../../utils/formatTime";
 import Icon from "../Icon/Icon";
 import styles from "./Track.module.css";
@@ -9,17 +10,24 @@ import classNames from "classnames";
 
 type TrackProps = {
   track: TrackType;
+  playlist: TrackListType;
 };
 
-export default function Track({ track }: TrackProps) {
+export default function Track({ track, playlist }: TrackProps) {
+  const dispatch = useAppDispatch();
+  const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
+  const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
+
+  const isCurrentTrack = currentTrack?.id === track.id;
+
   const { name, author, album, duration_in_seconds } = track;
 
   const formatedTime = formatTime(duration_in_seconds);
 
-  const { setCurrentTrack } = useCurrentTrack();
-
   const handleClick = () => {
-    setCurrentTrack(track);
+    dispatch(
+      setCurrentTrack({ currentTrack: track, currentPlaylist: playlist })
+    );
   };
 
   return (
@@ -28,7 +36,10 @@ export default function Track({ track }: TrackProps) {
         <div className={styles.trackTitle}>
           <Icon
             name="note"
-            wrapperClass={styles.trackTitleImage}
+            wrapperClass={classNames(styles.trackTitleImage, {
+              [styles.trackTitleImageActive]: isCurrentTrack,
+              [styles.trackTitleActiveAnimation]: isCurrentTrack && isPlaying,
+            })}
             iconClass={styles.trackTitleSvg}
           />
           <div className={styles.trackTitleText}>
