@@ -1,5 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TrackListType, TrackType } from "../../types/tracks";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { fetchFavoriteTracks } from "@/api/tracks";
+import { TrackListType, TrackType } from "@/types/tracks";
+
+export const getFavoriteTracks = createAsyncThunk(
+  "playlist/getFavoriteTracks",
+  async (accessToken: string, thunkAPI) => {
+    const favoriteTracks = await fetchFavoriteTracks(accessToken);
+    return favoriteTracks;
+  }
+);
 
 type PlaylistStateType = {
   currentTrack: null | TrackType;
@@ -7,6 +16,7 @@ type PlaylistStateType = {
   currentPlaylist: TrackListType;
   isPlaying: boolean;
   isShuffle: boolean;
+  likedTracks: number[];
 };
 
 const initialState: PlaylistStateType = {
@@ -15,6 +25,7 @@ const initialState: PlaylistStateType = {
   shuffledPlaylist: [],
   isPlaying: false,
   isShuffle: false,
+  likedTracks: [],
 };
 
 const playlistSlice = createSlice({
@@ -76,6 +87,24 @@ const playlistSlice = createSlice({
         state.currentTrack = playlist[prevIndex];
       }
     },
+    likeTrack: (state, action: PayloadAction<number>) => {
+      if (!state.likedTracks.includes(action.payload)) {
+        state.likedTracks.push(action.payload);
+      }
+    },
+    dislikeTrack: (state, action: PayloadAction<number>) => {
+      state.likedTracks = state.likedTracks.filter(
+        (id) => id !== action.payload
+      );
+    },
+    setLikedTracks: (state, action: PayloadAction<number[]>) => {
+      state.likedTracks = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getFavoriteTracks.fulfilled, (state, action) => {
+      state.likedTracks = action.payload.map((track: TrackType) => track.id);
+    });
   },
 });
 
@@ -85,5 +114,8 @@ export const {
   toggleShuffle,
   prevTrack,
   nextTrack,
+  likeTrack,
+  dislikeTrack,
+  setLikedTracks,
 } = playlistSlice.actions;
 export const playlistReducer = playlistSlice.reducer;

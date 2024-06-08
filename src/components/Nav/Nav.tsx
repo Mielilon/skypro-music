@@ -4,12 +4,23 @@ import Image from "next/image";
 import styles from "./Nav.module.css";
 import classNames from "classnames";
 import { useState } from "react";
+import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "../../hooks/store";
+import { logout } from "../../store/features/userSlice";
 
 export default function Nav() {
+  const dispatch = useAppDispatch();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const user = useAppSelector((state) => state.user.user);
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -45,9 +56,15 @@ export default function Nav() {
               </a>
             </li>
             <li className={styles.menuItem}>
-              <a href="../signin.html" className={styles.menuLink}>
-                Войти
-              </a>
+              {user ? (
+                <div className={styles.menuLink} onClick={handleLogout}>
+                  Выйти
+                </div>
+              ) : (
+                <Link href="/signin" className={styles.menuLink}>
+                  Войти
+                </Link>
+              )}
             </li>
           </ul>
         </div>

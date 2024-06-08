@@ -4,8 +4,8 @@ import { useState } from "react";
 import FilterItem from "./FilterItem/FilterItem";
 import styles from "./FilterList.module.css";
 import classNames from "classnames";
-import { TrackListType } from "../../types/tracks";
-import { getUniqueValues } from "../../utils/getUniqueValues";
+import { TrackListType } from "@/types/tracks";
+import { getUniqueValues } from "@/utils/getUniqueValues";
 
 const SORT_OPTIONS = ["По умолчанию", "Сначала новые", "Сначала старые"];
 
