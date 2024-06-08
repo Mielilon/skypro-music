@@ -126,6 +126,10 @@
   stroke: #696969;
 }
 
+.trackTimeSvgActive {
+  fill: #ad61ff;
+}
+
 .trackTimeText {
   font-style: normal;
   font-weight: 400;

@@ -2,7 +2,7 @@ import Track from "@/components/Track/Track";
 import styles from "./Playlist.module.css";
 import classNames from "classnames";
 import Icon from "../Icon/Icon";
-import { TrackListType } from "../../types/tracks";
+import { TrackListType } from "@/types/tracks";
 
 type PlaylistProps = {
   tracks: TrackListType;
