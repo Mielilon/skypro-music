@@ -1,11 +1,11 @@
 "use client";
+
 import { useState } from "react";
 import FormContainer from "@/components/Form/Container/Container";
 import Form from "@/components/Form/Form";
 import { useAppDispatch } from "@/hooks/store";
 import { InputFieldType, SignupFormType } from "@/types/form";
-import { getUser } from "@/api/user";
-import { setUser } from "@/store/features/userSlice";
+import { getUser, getTokens } from "@/store/features/userSlice";
 
 const inputFields: InputFieldType<SignupFormType>[] = [
   {
@@ -22,9 +22,9 @@ const inputFields: InputFieldType<SignupFormType>[] = [
   },
   {
     className: "username",
-    type: "password",
+    type: "text",
     name: "username",
-    placeholder: "Повторите пароль",
+    placeholder: "Имя пользователя",
   },
 ];
 
@@ -34,8 +34,8 @@ export default function SignupPage() {
 
   const queryFn = async (formData: SignupFormType) => {
     try {
-      const userData = await getUser(formData);
-      dispatch(setUser(userData));
+      const tokens = await dispatch(getTokens(formData)).unwrap();
+      await dispatch(getUser(formData)).unwrap();
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message);
       else setError("Неизвестная ошибка");

@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { getTokens, getUser } from "@/api/user";
+import { getTokens, getUser } from "@/store/features/userSlice";
 import FormContainer from "@/components/Form/Container/Container";
 import Form from "@/components/Form/Form";
 import { InputFieldType, SigninFormType } from "@/types/form";
-import { setTokens, setUser } from "@/store/features/userSlice";
 import { useAppDispatch } from "@/hooks/store";
 import { useRouter } from "next/navigation";
 
@@ -26,19 +25,13 @@ const inputFields: InputFieldType<SigninFormType>[] = [
 
 export default function SigninPage() {
   const router = useRouter();
-
   const dispatch = useAppDispatch();
   const [error, setError] = useState<string>("");
 
   const queryFn = async (formData: SigninFormType) => {
     try {
-      const [userData, tokens] = await Promise.all([
-        getUser(formData),
-        getTokens(formData),
-      ]);
-
-      dispatch(setUser(userData));
-      dispatch(setTokens(tokens));
+      await dispatch(getTokens(formData)).unwrap();
+      await dispatch(getUser(formData)).unwrap();
 
       router.push("/");
     } catch (error: unknown) {
