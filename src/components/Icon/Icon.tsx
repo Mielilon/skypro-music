@@ -2,7 +2,7 @@ type IconProps = {
   wrapperClass?: string;
   iconClass: string;
   name: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 };
 
 export default function Icon({

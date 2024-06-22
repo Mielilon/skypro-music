@@ -118,7 +118,11 @@ export default function Bar() {
             toggleLoop={toggleLoop}
             handleShuffle={handleShuffle}
           />
-          <TrackInfo author={currentTrack.author} album={currentTrack.album} />
+          <TrackInfo
+            author={currentTrack.author}
+            album={currentTrack.album}
+            trackId={currentTrack.id}
+          />
           <Volume audio={audioRef.current} />
         </div>
       </div>

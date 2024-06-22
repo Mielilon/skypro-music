@@ -1,13 +1,17 @@
 import Icon from "@/components/Icon/Icon";
 import styles from "./TrackInfo.module.css";
 import classNames from "classnames";
+import { useLikeTrack } from "../../../hooks/useLikeTrack";
 
 type TrackInfoProps = {
   author: string;
   album: string;
+  trackId: number;
 };
 
-export default function TrackInfo({ author, album }: TrackInfoProps) {
+export default function TrackInfo({ author, album, trackId }: TrackInfoProps) {
+  const { isLiked, handleLike } = useLikeTrack(trackId);
+
   return (
     <div className={classNames(styles.playerTrackPlay, styles.trackPlay)}>
       <div className={styles.trackPlayContain}>
@@ -29,15 +33,13 @@ export default function TrackInfo({ author, album }: TrackInfoProps) {
         <div className={classNames(styles.trackPlayLike, styles._btnIcon)}>
           <Icon
             name="like"
+            onClick={handleLike}
+            iconClass={classNames(styles.trackPlayLikeSvg, {
+              [styles.trackPlayLikeSvgActive]: isLiked,
+            })}
             wrapperClass={classNames(styles.trackPlayLike, styles._btnIcon)}
-            iconClass={styles.trackPlayLikeSvg}
           />
         </div>
-        <Icon
-          name="dislike"
-          wrapperClass={classNames(styles.trackPlayDislike, styles._btnIcon)}
-          iconClass={styles.trackPlayDislikeSvg}
-        />
       </div>
     </div>
   );
