@@ -79,7 +79,9 @@
   fill: transparent;
   stroke: #696969;
 }
-
+.trackPlayLikeSvgActive {
+  fill: #ad61ff;
+}
 .trackPlayDislike {
   margin-left: 28.5px;
 }
