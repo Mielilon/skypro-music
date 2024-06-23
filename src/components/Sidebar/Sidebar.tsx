@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./Sidebar.module.css";
-import classNames from "classnames";
+import cn from "classnames";
 import User from "./User/User";
 
 const sidebarItems = [
@@ -26,7 +26,7 @@ const sidebarItems = [
 
 export default function Sidebar() {
   return (
-    <div className={classNames(styles.mainSidebar, styles.sidebar)}>
+    <div className={cn(styles.mainSidebar, styles.sidebar)}>
       <User />
       <div className={styles.sidebarBlock}>
         <div className={styles.sidebarList}>

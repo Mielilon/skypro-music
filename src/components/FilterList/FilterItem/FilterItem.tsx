@@ -1,35 +1,49 @@
-import classNames from "classnames";
-
+import cn from "classnames";
 import styles from "./FilterItem.module.css";
+import { useAppDispatch } from "@/hooks/store";
+import { setActiveFilters } from "../../../store/features/playlistSlice";
 
 type FilterItemProps = {
   title: string;
-  isActive: boolean;
+  isOpen: boolean;
   handleFilter: () => void;
   list: string[];
+  active: string[] | string;
+  handleActiveFilter: (item: string) => void;
 };
 
 export default function FilterItem({
   title,
-  isActive,
+  isOpen,
   handleFilter,
   list,
+  active,
+  handleActiveFilter,
 }: FilterItemProps) {
   return (
     <div className={styles.filterWrapper}>
       <div
-        className={classNames(styles.filterButton, {
-          [styles.filterButtonActive]: isActive,
+        className={cn(styles.filterButton, {
+          [styles.filterButtonActive]: isOpen,
         })}
         onClick={handleFilter}
       >
         {title}
       </div>
-      {isActive && (
+      {isOpen && (
         <div className={styles.filterListWrapper}>
           <ul className={styles.filterList}>
             {list.map((item) => (
-              <li key={item} className={styles.filterListItem}>
+              <li
+                key={item}
+                onClick={() => handleActiveFilter(item)}
+                className={cn(styles.filterListItem, {
+                  [styles.filterListItemActive]:
+                    typeof active === "string"
+                      ? active === item
+                      : active.includes(item),
+                })}
+              >
                 {item}
               </li>
             ))}

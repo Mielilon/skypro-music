@@ -50,3 +50,7 @@
 .filterListItem {
   cursor: pointer;
 }
+
+.filterListItemActive {
+  color: #ad61ff;
+}
