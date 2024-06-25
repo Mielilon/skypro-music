@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import styles from "./PlayerControls.module.css";
-import classNames from "classnames";
+import cn from "classnames";
 
 type PlayerControlsProps = {
   isPlaying: boolean;
@@ -46,7 +46,7 @@ export default function PlayerControls({
       name: "repeat",
       handler: toggleLoop,
       wrapperClass: styles.playerBtnRepeat,
-      iconClass: classNames(styles.playerBtnRepeatSvg, {
+      iconClass: cn(styles.playerBtnRepeatSvg, {
         [styles.active]: isLoop,
       }),
     },
@@ -54,7 +54,7 @@ export default function PlayerControls({
       name: "shuffle",
       handler: handleShuffle,
       wrapperClass: styles.playerBtnShuffle,
-      iconClass: classNames(styles.playerBtnShuffleSvg, {
+      iconClass: cn(styles.playerBtnShuffleSvg, {
         [styles.active]: isShuffle,
       }),
     },

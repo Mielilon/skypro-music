@@ -6,7 +6,7 @@ import { TrackListType, TrackType } from "@/types/tracks";
 import { formatTime } from "@/utils/formatTime";
 import Icon from "@/components/Icon/Icon";
 import styles from "./Track.module.css";
-import classNames from "classnames";
+import cn from "classnames";
 import { useLikeTrack } from "@/hooks/useLikeTrack";
 
 type TrackProps = {
@@ -34,12 +34,12 @@ export default function Track({ track, playlist }: TrackProps) {
   };
 
   return (
-    <div className={classNames(styles.playlistItem)} onClick={handleClick}>
-      <div className={classNames(styles.playlistTrack, styles.track)}>
+    <div className={cn(styles.playlistItem)} onClick={handleClick}>
+      <div className={cn(styles.playlistTrack, styles.track)}>
         <div className={styles.trackTitle}>
           <Icon
             name="note"
-            wrapperClass={classNames(styles.trackTitleImage, {
+            wrapperClass={cn(styles.trackTitleImage, {
               [styles.trackTitleImageActive]: isCurrentTrack,
               [styles.trackTitleActiveAnimation]: isCurrentTrack && isPlaying,
             })}
@@ -60,7 +60,7 @@ export default function Track({ track, playlist }: TrackProps) {
         <div className={styles.trackTime} onClick={handleLike}>
           <Icon
             name="like"
-            iconClass={classNames(styles.trackTimeSvg, {
+            iconClass={cn(styles.trackTimeSvg, {
               [styles.trackTimeSvgActive]: isLiked,
             })}
           />

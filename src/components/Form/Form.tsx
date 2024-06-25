@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import classNames from "classnames";
+import cn from "classnames";
 import styles from "./Form.module.css";
 import Link from "next/link";
 import { InputFieldType, SigninFormType } from "@/types/form";
@@ -48,7 +48,7 @@ export default function Form<F extends Record<string, string>>({
           <input
             key={field.name}
             {...field}
-            className={classNames(styles.modalInput, field.className)}
+            className={cn(styles.modalInput, field.className)}
             value={formData[field.name as keyof F]}
             onChange={handleChange}
           />

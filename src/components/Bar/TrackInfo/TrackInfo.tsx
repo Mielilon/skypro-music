@@ -1,6 +1,6 @@
 import Icon from "@/components/Icon/Icon";
 import styles from "./TrackInfo.module.css";
-import classNames from "classnames";
+import cn from "classnames";
 import { useLikeTrack } from "../../../hooks/useLikeTrack";
 
 type TrackInfoProps = {
@@ -13,7 +13,7 @@ export default function TrackInfo({ author, album, trackId }: TrackInfoProps) {
   const { isLiked, handleLike } = useLikeTrack(trackId);
 
   return (
-    <div className={classNames(styles.playerTrackPlay, styles.trackPlay)}>
+    <div className={cn(styles.playerTrackPlay, styles.trackPlay)}>
       <div className={styles.trackPlayContain}>
         <Icon
           name="track"
@@ -30,14 +30,14 @@ export default function TrackInfo({ author, album, trackId }: TrackInfoProps) {
         </div>
       </div>
       <div className={styles.trackPlayLikeDis}>
-        <div className={classNames(styles.trackPlayLike, styles._btnIcon)}>
+        <div className={cn(styles.trackPlayLike, styles._btnIcon)}>
           <Icon
             name="like"
             onClick={handleLike}
-            iconClass={classNames(styles.trackPlayLikeSvg, {
+            iconClass={cn(styles.trackPlayLikeSvg, {
               [styles.trackPlayLikeSvgActive]: isLiked,
             })}
-            wrapperClass={classNames(styles.trackPlayLike, styles._btnIcon)}
+            wrapperClass={cn(styles.trackPlayLike, styles._btnIcon)}
           />
         </div>
       </div>

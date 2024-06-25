@@ -7,7 +7,6 @@ export const getUser = async ({
   email,
   password,
 }: SigninFormType): Promise<UserType> => {
-  console.log(email, password);
   try {
     const response = await fetch(API_URL + "/login/", {
       method: "POST",

@@ -1,45 +1,91 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import FilterItem from "./FilterItem/FilterItem";
 import styles from "./FilterList.module.css";
-import classNames from "classnames";
+import cn from "classnames";
 import { TrackListType } from "@/types/tracks";
 import { getUniqueValues } from "@/utils/getUniqueValues";
-
-const SORT_OPTIONS = ["По умолчанию", "Сначала новые", "Сначала старые"];
+import { SORT_OPTIONS } from "@/constants";
+import { useAppDispatch, useAppSelector } from "@/hooks/store";
+import { setActiveFilters } from "../../store/features/playlistSlice";
 
 type FilterListProps = {
   tracks: TrackListType;
 };
 
+type ActiveFilters = {
+  authors: string[];
+  sortOption: string;
+  genres: string[];
+};
+
 export default function FilterList({ tracks }: FilterListProps) {
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const [openFilter, setOpenFilter] = useState<string | null>(null);
+  const activeFilters = useAppSelector(
+    (state) => state.playlist.activeFilters as ActiveFilters
+  );
 
   const handleFilter = (filter: string) => {
-    setActiveFilter((prev) => (prev === filter ? null : filter));
+    setOpenFilter((prev) => (prev === filter ? null : filter));
   };
 
-  const filters = [
-    {
-      title: "Исполнителю",
-      key: "author",
-      list: getUniqueValues(tracks, "author"),
-    },
-    { title: "Году выпуска", key: "year", list: SORT_OPTIONS },
-    { title: "Жанру", key: "genre", list: getUniqueValues(tracks, "genre") },
-  ];
+  const createHandleActiveFilter =
+    (type: keyof ActiveFilters) => (item: string) => {
+      const currentFilter = activeFilters[type];
+
+      if (Array.isArray(currentFilter)) {
+        const updatedFilter = currentFilter.includes(item)
+          ? currentFilter.filter((i: string) => i !== item)
+          : [...currentFilter, item];
+        dispatch(setActiveFilters({ ...activeFilters, [type]: updatedFilter }));
+      } else {
+        dispatch(setActiveFilters({ ...activeFilters, [type]: item }));
+      }
+    };
+
+  const filters = useMemo(
+    () => [
+      {
+        title: "Исполнителю",
+        type: "authors" as keyof ActiveFilters,
+        list: getUniqueValues(tracks, "author"),
+        active: activeFilters.authors,
+        handleActiveFilter: createHandleActiveFilter("authors"),
+      },
+      {
+        title: "Году выпуска",
+        type: "sortOption" as keyof ActiveFilters,
+        list: Object.values(SORT_OPTIONS),
+        active: activeFilters.sortOption,
+        handleActiveFilter: (item: string) => {
+          dispatch(setActiveFilters({ ...activeFilters, sortOption: item }));
+        },
+      },
+      {
+        title: "Жанру",
+        type: "genres" as keyof ActiveFilters,
+        list: getUniqueValues(tracks, "genre"),
+        active: activeFilters.genres,
+        handleActiveFilter: createHandleActiveFilter("genres"),
+      },
+    ],
+    [tracks, activeFilters, dispatch]
+  );
 
   return (
-    <div className={classNames(styles.centerblockFilter, styles.filter)}>
+    <div className={cn(styles.centerblockFilter, styles.filter)}>
       <div className={styles.filterTitle}>Искать по:</div>
       {filters.map((filter) => (
         <FilterItem
-          key={filter.key}
+          key={filter.type}
+          handleActiveFilter={filter.handleActiveFilter}
           title={filter.title}
-          isActive={activeFilter === filter.key}
-          handleFilter={() => handleFilter(filter.key)}
+          isOpen={openFilter === filter.type}
+          handleFilter={() => handleFilter(filter.type)}
           list={filter.list}
+          active={filter.active}
         />
       ))}
     </div>
