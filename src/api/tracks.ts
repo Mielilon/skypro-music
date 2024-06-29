@@ -60,21 +60,18 @@ export async function dislikeTrack({
 
 export const fetchFavoriteTracks = async (accessToken: string) => {
   try {
-    const response = await fetch(
-      "https://skypro-music-api.skyeng.tech/catalog/track/favorite/all/",
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const response = await fetch(API_URL + "/track/favorite/all/", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     if (!response.ok) {
-      throw new Error("Failed to fetch favorite tracks");
+      throw new Error("Ошибка при получении избранных треков");
     }
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching favorite tracks:", error);
+    console.error(error);
     throw error;
   }
 };

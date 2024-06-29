@@ -30,8 +30,10 @@ export default function SigninPage() {
 
   const queryFn = async (formData: SigninFormType) => {
     try {
-      await dispatch(getTokens(formData)).unwrap();
-      await dispatch(getUser(formData)).unwrap();
+      await Promise.all([
+        dispatch(getTokens(formData)).unwrap(),
+        dispatch(getUser(formData)).unwrap(),
+      ]);
 
       router.push("/");
     } catch (error: unknown) {

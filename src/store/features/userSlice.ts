@@ -1,53 +1,23 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SigninFormType } from "@/types/form";
 import { UserType } from "@/types/user";
-
-const API_URL = "https://skypro-music-api.skyeng.tech/user";
+import { fetchTokens, fetchUser } from "@/api/user";
 
 export const getUser = createAsyncThunk(
   "user/getUser",
   async ({ email, password }: SigninFormType) => {
-    const response = await fetch(`${API_URL}/login/`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const user = await fetchUser({ email, password });
 
-    const json = await response.json();
-
-    if (!response.ok) {
-      throw new Error(json.detail);
-    }
-
-    return json as UserType;
+    return user;
   }
 );
 
 export const getTokens = createAsyncThunk(
   "user/getTokens",
   async ({ email, password }: SigninFormType) => {
-    const response = await fetch(`${API_URL}/token/`, {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const tokens = await fetchTokens({ email, password });
 
-    if (!response.ok) {
-      throw new Error(`Возникла ошибка! Статус: ${response.status}`);
-    }
-
-    const json = await response.json();
-    return json;
+    return tokens;
   }
 );
 

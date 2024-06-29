@@ -34,8 +34,10 @@ export default function SignupPage() {
 
   const queryFn = async (formData: SignupFormType) => {
     try {
-      const tokens = await dispatch(getTokens(formData)).unwrap();
-      await dispatch(getUser(formData)).unwrap();
+      await Promise.all([
+        dispatch(getTokens(formData)).unwrap(),
+        dispatch(getUser(formData)).unwrap(),
+      ]);
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message);
       else setError("Неизвестная ошибка");

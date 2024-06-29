@@ -3,7 +3,7 @@ import { UserType } from "@/types/user";
 
 const API_URL = "https://skypro-music-api.skyeng.tech/user";
 
-export const getUser = async ({
+export const fetchUser = async ({
   email,
   password,
 }: SigninFormType): Promise<UserType> => {
@@ -14,9 +14,6 @@ export const getUser = async ({
         email,
         password,
       }),
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     const json = await response.json();
@@ -32,7 +29,7 @@ export const getUser = async ({
   }
 };
 
-export const getTokens = async ({ email, password }: SigninFormType) => {
+export const fetchTokens = async ({ email, password }: SigninFormType) => {
   try {
     const response = await fetch(API_URL + "/token/", {
       method: "POST",
@@ -40,9 +37,6 @@ export const getTokens = async ({ email, password }: SigninFormType) => {
         email,
         password,
       }),
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     if (!response.ok) {

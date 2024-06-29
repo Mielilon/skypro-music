@@ -16,6 +16,7 @@ export default async function Home() {
   try {
     tracks = await getTracks();
   } catch (err: unknown) {
+    console.error(err);
     error =
       err instanceof Error
         ? "Ошибка при загрузке треков. " + err.message
