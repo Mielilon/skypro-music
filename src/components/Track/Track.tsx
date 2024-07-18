@@ -20,8 +20,8 @@ export default function Track({ track, playlist }: TrackProps) {
   const currentTrack = useAppSelector((state) => state.playlist.currentTrack);
   const isPlaying = useAppSelector((state) => state.playlist.isPlaying);
 
-  const isCurrentTrack = currentTrack?.id === track.id;
-  const { isLiked, handleLike } = useLikeTrack(track.id);
+  const isCurrentTrack = currentTrack?._id === track._id;
+  const { isLiked, handleLike } = useLikeTrack(track._id);
 
   const { name, author, album, duration_in_seconds } = track;
 

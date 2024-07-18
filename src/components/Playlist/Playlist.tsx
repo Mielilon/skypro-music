@@ -56,7 +56,7 @@ export default function Playlist({ tracks, error }: PlaylistProps) {
           <div className={styles.noTracks}>Треки не найдены</div>
         ) : (
           tracksToDisplay.map((track) => (
-            <Track key={track.id} track={track} playlist={tracksToDisplay} />
+            <Track key={track._id} track={track} playlist={tracksToDisplay} />
           ))
         )}
       </div>

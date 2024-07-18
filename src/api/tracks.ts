@@ -1,15 +1,16 @@
 import { fetchWithAuth } from "@/utils/fetchWithAuth";
+import { API_URL } from "../constants";
 
-const API_URL = "https://skypro-music-api.skyeng.tech/catalog";
+const TRACKS_API_URL = `${API_URL}/catalog`;
 
 export async function getTracks() {
-  const res = await fetch(API_URL + "/track/all/");
+  const res = await fetch(TRACKS_API_URL + "/track/all/");
 
   if (!res.ok) {
     throw new Error(res.statusText);
   }
 
-  return res.json();
+  return res.json().then((e) => e.data);
 }
 
 export async function likeTrack({
@@ -22,10 +23,11 @@ export async function likeTrack({
   refresh: string;
 }) {
   const res = await fetchWithAuth(
-    API_URL + `/track/${trackId}/favorite/`,
+    TRACKS_API_URL + `/track/${trackId}/favorite/`,
     {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${access}`,
       },
     },
@@ -45,10 +47,11 @@ export async function dislikeTrack({
   refresh: string;
 }) {
   const res = await fetchWithAuth(
-    API_URL + `/track/${trackId}/favorite/`,
+    TRACKS_API_URL + `/track/${trackId}/favorite/`,
     {
       method: "DELETE",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${access}`,
       },
     },
@@ -60,8 +63,9 @@ export async function dislikeTrack({
 
 export const fetchFavoriteTracks = async (accessToken: string) => {
   try {
-    const response = await fetch(API_URL + "/track/favorite/all/", {
+    const response = await fetch(TRACKS_API_URL + "/track/favorite/all/", {
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     });

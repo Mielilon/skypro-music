@@ -1,15 +1,19 @@
 import { SigninFormType } from "@/types/form";
 import { UserType } from "@/types/user";
+import { API_URL } from "../constants";
 
-const API_URL = "https://skypro-music-api.skyeng.tech/user";
+const USER_API_URL = `${API_URL}/user`;
 
 export const fetchUser = async ({
   email,
   password,
 }: SigninFormType): Promise<UserType> => {
   try {
-    const response = await fetch(API_URL + "/login/", {
+    const response = await fetch(USER_API_URL + "/login/", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         email,
         password,
@@ -31,8 +35,11 @@ export const fetchUser = async ({
 
 export const fetchTokens = async ({ email, password }: SigninFormType) => {
   try {
-    const response = await fetch(API_URL + "/token/", {
+    const response = await fetch(USER_API_URL + "/token/", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         email,
         password,

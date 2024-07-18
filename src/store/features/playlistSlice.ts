@@ -7,7 +7,7 @@ export const getFavoriteTracks = createAsyncThunk(
   "playlist/getFavoriteTracks",
   async (accessToken: string) => {
     const favoriteTracks = await fetchFavoriteTracks(accessToken);
-    return favoriteTracks;
+    return favoriteTracks.data;
   }
 );
 
@@ -58,6 +58,7 @@ const playlistSlice = createSlice({
         currentPlaylist: TrackListType;
       }>
     ) => {
+      console.log(action.payload.currentPlaylist);
       state.currentTrack = action.payload.currentTrack;
       state.currentPlaylist = action.payload.currentPlaylist;
       state.shuffledPlaylist = [...action.payload.currentPlaylist].sort(
@@ -80,7 +81,7 @@ const playlistSlice = createSlice({
         : state.currentPlaylist;
 
       const currentIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
+        (track) => track._id === state.currentTrack?._id
       );
       const nextIndex = currentIndex + 1;
 
@@ -96,7 +97,7 @@ const playlistSlice = createSlice({
         : state.currentPlaylist;
 
       const currentIndex = playlist.findIndex(
-        (track) => track.id === state.currentTrack?.id
+        (track) => track._id === state.currentTrack?._id
       );
       const prevIndex = currentIndex - 1;
 
@@ -185,7 +186,7 @@ const playlistSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getFavoriteTracks.fulfilled, (state, action) => {
-      state.likedTracks = action.payload.map((track: TrackType) => track.id);
+      state.likedTracks = action.payload.map((track: TrackType) => track._id);
     });
   },
 });

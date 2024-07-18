@@ -121,7 +121,7 @@ export default function Bar() {
           <TrackInfo
             author={currentTrack.author}
             album={currentTrack.album}
-            trackId={currentTrack.id}
+            trackId={currentTrack._id}
           />
           <Volume audio={audioRef.current} />
         </div>

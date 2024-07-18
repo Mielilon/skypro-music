@@ -1,7 +1,9 @@
-const AUTH_URL = "https://skypro-music-api.skyeng.tech/user";
+import { API_URL } from "../constants";
+
+const AUTH_API_URL = `${API_URL}/user`;
 
 export async function refreshToken(refreshToken: string): Promise<string> {
-  const res = await fetch(AUTH_URL + "/token/refresh/", {
+  const res = await fetch(AUTH_API_URL + "/token/refresh/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
